@@ -81,7 +81,6 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
                 intent.putExtra("locId", currentLocationId);
                // intent.putExtra(Constants.JSON_TYPE, currentDocTypeId);
 
-
                 startActivity(intent);
             }
         });
@@ -204,9 +203,8 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
                             intent.putExtra("New", false);
                             intent.putExtra(Constants.JSON_TYPE, mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_TYPE).toUpperCase());
                             intent.putExtra(Constants.JSON_ID_TIP_DOC, mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID_TIP_DOC));
-                            intent.putExtra(Constants.JSON_LOCATIE, mLocatiiUser.getSelectedItem().toString());
-                            intent.putExtra("locId", currentLocationId);
-
+                            intent.putExtra(Constants.JSON_ID, mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID));
+                            intent.putExtra(Constants.JSON_DAY, mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_DAY));
                             startActivity(intent);
                         } catch (JSONException e){
                             e.printStackTrace();

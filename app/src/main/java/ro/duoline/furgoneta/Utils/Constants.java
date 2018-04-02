@@ -32,6 +32,7 @@ public class Constants {
     public static final String GET_TODAY_DOCUMENTS = "getTodayDocById.php";
     public static final String SET_NEW_DOCUMENT = "setNewDoc.php";
     public static final String SET_DEL_DOCUMENT = "setDelDocument.php";
+    public static final String GET_LIST_OF_PRODUCTS = "getProductsByDocType.php";
 
     public static final String JSON_RESULT = "result";
     public static final String JSON_USER_ID = "userId";
