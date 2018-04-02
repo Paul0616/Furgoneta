@@ -33,6 +33,8 @@ public class Constants {
     public static final String SET_NEW_DOCUMENT = "setNewDoc.php";
     public static final String SET_DEL_DOCUMENT = "setDelDocument.php";
     public static final String GET_LIST_OF_PRODUCTS = "getProductsByDocType.php";
+    public static final String SET_LIST_OF_PRODUCTS = "setProductsByDocNo.php";
+    public static final String GET_DOCUMENT_PRODUCTS = "getDocumentProducts.php";
 
     public static final String JSON_RESULT = "result";
     public static final String JSON_USER_ID = "userId";
@@ -56,6 +58,7 @@ public class Constants {
     public static final String JSON_HOUR = "hour";
     public static final String JSON_DAY = "day";
     public static final String JSON_ID_TIP_DOC = "tipDocId";
+    public static final String JSON_QUANTITY = "cantitatea";
 
     public static void setCardEnabled(CardView cardView, boolean enabled){
         int colorEnabled = cardView.getContext().getResources().getColor(R.color.colorAccent);

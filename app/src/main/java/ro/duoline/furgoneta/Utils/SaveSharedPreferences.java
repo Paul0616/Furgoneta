@@ -56,4 +56,59 @@ public class SaveSharedPreferences {
 
         return (getPrenume(ctx) + " " + getNume(ctx));
     }
+    //#####################################################################
+
+    public static void setDocumentType(Context ctx, String docType){
+        SharedPreferences.Editor editor = getSharedPreference(ctx).edit();
+        editor.putString("documentType", docType);
+        editor.commit();
+    }
+    public static String getDocumentType(Context ctx){
+        return getSharedPreference(ctx).getString("documentType", "");
+    }
+
+    public static void setDocumentTypeID(Context ctx, int docTypeID){
+        SharedPreferences.Editor editor = getSharedPreference(ctx).edit();
+        editor.putInt("documentTypeID", docTypeID);
+        editor.commit();
+    }
+    public static int getDocumentTypeID(Context ctx){
+        return getSharedPreference(ctx).getInt("documentTypeID", 0);
+    }
+
+    public static void setDocumentNo(Context ctx, int docNo){
+        SharedPreferences.Editor editor = getSharedPreference(ctx).edit();
+        editor.putInt("documentNo", docNo);
+        editor.commit();
+    }
+    public static int getDocumentNo(Context ctx){
+        return getSharedPreference(ctx).getInt("documentNo", 0);
+    }
+
+    public static void setDocumentDate(Context ctx, String docDate){
+        SharedPreferences.Editor editor = getSharedPreference(ctx).edit();
+        editor.putString("documentDate", docDate);
+        editor.commit();
+    }
+    public static String getDocumentDate(Context ctx){
+        return getSharedPreference(ctx).getString("documentDate", "");
+    }
+
+    public static void setCurrentLocation(Context ctx, String curLoc){
+        SharedPreferences.Editor editor = getSharedPreference(ctx).edit();
+        editor.putString("currentLocation", curLoc);
+        editor.commit();
+    }
+    public static String getCurrentLocation(Context ctx){
+        return getSharedPreference(ctx).getString("currentLocation", "");
+    }
+
+    public static void setCurrentLocationId(Context ctx, int curLocId){
+        SharedPreferences.Editor editor = getSharedPreference(ctx).edit();
+        editor.putInt("currentLocationId", curLocId);
+        editor.commit();
+    }
+    public static int getCurrentLocationId(Context ctx){
+        return getSharedPreference(ctx).getInt("currentLocationId",0);
+    }
 }

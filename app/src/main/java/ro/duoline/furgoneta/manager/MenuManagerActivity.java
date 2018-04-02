@@ -12,6 +12,7 @@ import org.json.JSONException;
 import ro.duoline.furgoneta.R;
 import ro.duoline.furgoneta.Utils.Constants;
 import ro.duoline.furgoneta.Utils.LoadFromUrl;
+import ro.duoline.furgoneta.Utils.SaveSharedPreferences;
 
 public class MenuManagerActivity extends AppCompatActivity implements LoadFromUrl.LoadFromUrlFinished{
     CardView mBSupply, mBConsum, mBFixture, mBDayClose;
@@ -27,8 +28,8 @@ public class MenuManagerActivity extends AppCompatActivity implements LoadFromUr
         mBConsum = (CardView) findViewById(R.id.cb_bon);
         mBFixture = (CardView) findViewById(R.id.cb_inventar);
         mBDayClose = (CardView) findViewById(R.id.cb_incheiere);
-        mLocatie = getIntent().getStringExtra(Constants.JSON_LOCATIE);
-        mLocatieId = getIntent().getIntExtra("locId", 0);
+        mLocatie = SaveSharedPreferences.getCurrentLocation(getApplicationContext());//getIntent().getStringExtra(Constants.JSON_LOCATIE);
+        mLocatieId = SaveSharedPreferences.getCurrentLocationId(getApplicationContext());//getIntent().getIntExtra("locId", 0);
 
 
 
@@ -38,9 +39,9 @@ public class MenuManagerActivity extends AppCompatActivity implements LoadFromUr
             public void onClick(View v) {
                 Intent intent = new Intent(MenuManagerActivity.this, DocumentViewActivity.class);
                 intent.putExtra("New", true);
-                intent.putExtra(Constants.JSON_TYPE, "FISA APROVIZIONARE");
-                intent.putExtra(Constants.JSON_ID_TIP_DOC, 1);
-                intent.putExtra(Constants.JSON_LOCATIE, mLocatie);
+                SaveSharedPreferences.setDocumentType(getApplicationContext(), "FISA APROVIZIONARE");//intent.putExtra(Constants.JSON_TYPE, "FISA APROVIZIONARE");
+                SaveSharedPreferences.setDocumentTypeID(getApplicationContext(), 1);//intent.putExtra(Constants.JSON_ID_TIP_DOC, 1);
+                //intent.putExtra(Constants.JSON_LOCATIE, mLocatie);
                 intent.putExtra("locId", mLocatieId);
 
                 startActivity(intent);

@@ -76,9 +76,11 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AllDocumentsActivity.this, MenuManagerActivity.class);
-                String loc = mLocatiiUser.getSelectedItem().toString();
-                intent.putExtra(Constants.JSON_LOCATIE, loc);
-                intent.putExtra("locId", currentLocationId);
+                SaveSharedPreferences.setCurrentLocation(getApplicationContext(), mLocatiiUser.getSelectedItem().toString());
+               // String loc = mLocatiiUser.getSelectedItem().toString();
+                //intent.putExtra(Constants.JSON_LOCATIE, loc);
+                SaveSharedPreferences.setCurrentLocationId(getApplicationContext(), currentLocationId);
+               // intent.putExtra("locId", currentLocationId);
                // intent.putExtra(Constants.JSON_TYPE, currentDocTypeId);
 
                 startActivity(intent);
@@ -201,10 +203,15 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
                         try {
                             Intent intent = new Intent(AllDocumentsActivity.this, DocumentViewActivity.class);
                             intent.putExtra("New", false);
-                            intent.putExtra(Constants.JSON_TYPE, mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_TYPE).toUpperCase());
-                            intent.putExtra(Constants.JSON_ID_TIP_DOC, mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID_TIP_DOC));
-                            intent.putExtra(Constants.JSON_ID, mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID));
-                            intent.putExtra(Constants.JSON_DAY, mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_DAY));
+
+                           // intent.putExtra(Constants.JSON_TYPE, mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_TYPE).toUpperCase());
+                            SaveSharedPreferences.setDocumentType(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_TYPE).toUpperCase());
+                          //  intent.putExtra(Constants.JSON_ID_TIP_DOC, mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID_TIP_DOC));
+                            SaveSharedPreferences.setDocumentTypeID(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID_TIP_DOC));
+                          //  intent.putExtra(Constants.JSON_ID, mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID));
+                            SaveSharedPreferences.setDocumentNo(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID));
+                           // intent.putExtra(Constants.JSON_DAY, mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_DAY));
+                            SaveSharedPreferences.setDocumentDate(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_DAY));
                             startActivity(intent);
                         } catch (JSONException e){
                             e.printStackTrace();
