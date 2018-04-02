@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Furgoneta</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Log In</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">User name invalid</string>
+    <string name="error_invalid_password">Parola e prea scurta</string>
+    <string name="error_incorrect_password">Parola incorecta</string>
+    <string name="error_no_email">Acest username nu exista</string>
+    <string name="error_field_required">Username e obligatoriu</string>
+    <string name="title_activity_add_location">Adaugare Locatii</string>
+    <string name="title_activity_add_products">Adaugare Produse</string>
+    <string name="title_activity_add_users">Adaugare Useri</string>
+    <string name="title_activity_all_documents">Documentele de azi</string>
+    <string name="title_activity_document_view">Locatie</string>
+
+</resources>
