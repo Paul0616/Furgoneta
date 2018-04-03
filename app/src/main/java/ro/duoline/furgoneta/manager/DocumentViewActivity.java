@@ -1,18 +1,23 @@
 package ro.duoline.furgoneta.manager;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,16 +32,19 @@ import ro.duoline.furgoneta.R;
 import ro.duoline.furgoneta.Utils.Constants;
 import ro.duoline.furgoneta.Utils.LoadFromUrl;
 import ro.duoline.furgoneta.Utils.SaveSharedPreferences;
+import ro.duoline.furgoneta.administrator.AddProductsActivity;
 
 public class DocumentViewActivity extends AppCompatActivity implements LoadFromUrl.LoadFromUrlFinished{
     boolean docNew = false;
     private static final int LOADER_NEW_DOC = 22;
     private static final int LOADER_DOC_PRODUCTS = 25;
+    private static final int LOADER_SET_QUANTITY = 26;
     private TextView mDocType, mDocNo, mDocDate;
     int mDocID, mDocTypeID;
     private RecyclerView rvDoc;
     private ArrayList<Integer> mListProductsId;
     DocumentAdapter adapter;
+    boolean finalizat;
    // String mDocTypeStr;
 
     @Override
@@ -63,6 +71,11 @@ public class DocumentViewActivity extends AppCompatActivity implements LoadFromU
         rvDoc.setAdapter(adapter);
         mListProductsId = new ArrayList<Integer>();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        if(getIntent().hasExtra("finalizat")){
+            finalizat = getIntent().getBooleanExtra("finalizat", false);
+          fab.setVisibility(finalizat ? View.INVISIBLE : View.VISIBLE);
+        }
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,6 +123,17 @@ public class DocumentViewActivity extends AppCompatActivity implements LoadFromU
             }
         }
         if(jarray != null && idLoader == LOADER_DOC_PRODUCTS) {
+            adapter.setJsonArray(jarray);
+            try {
+                mListProductsId = new ArrayList<Integer>();
+                for(int i = 0; i < jarray.length(); i++) {
+                    mListProductsId.add(jarray.getJSONObject(i).getInt(Constants.JSON_ID));
+                }
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+        if(jarray != null && idLoader == LOADER_SET_QUANTITY) {
             adapter.setJsonArray(jarray);
             try {
                 mListProductsId = new ArrayList<Integer>();
@@ -171,9 +195,59 @@ public class DocumentViewActivity extends AppCompatActivity implements LoadFromU
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                    if(!finalizat) {
+                        try {
+                            int productId = mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID);
+                            double qty = mJarr.getJSONObject(getAdapterPosition()).getDouble(Constants.JSON_QUANTITY);
+                            LayoutInflater li = LayoutInflater.from(getApplicationContext());
+                            View promptView = li.inflate(R.layout.prompt_edit_quantity, null);
+                            addQuantity(promptView, Double.toString(qty), productId, mDocID);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     }
                 });
+            }
+            private void addQuantity(View view, String qty, final int idProdus, final int idDocument) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(DocumentViewActivity.this);
+                builder.setView(view);
+                final EditText quantity = (EditText) view.findViewById(R.id.editTextDialogQuantity);
+
+                if (!TextUtils.isEmpty(qty)){
+                    quantity.setText(qty);
+
+                }
+                builder.setTitle("Cantitatea dorita:");
+                builder.setIcon(R.drawable.ingredients);
+                builder.setCancelable(false);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Double newQty = Double.parseDouble(quantity.getText().toString());
+
+                        if (!TextUtils.isEmpty(quantity.getText().toString())){
+                            ContentValues cv = new ContentValues();
+                            cv.put(Constants.JSON_QUANTITY, newQty);
+                            if (idProdus != 0 && idDocument != 0){
+                                cv.put(Constants.JSON_ID, Integer.toString(idProdus));
+                                cv.put(Constants.JSON_ID_TIP_DOC, Integer.toString(idDocument));
+                            }
+                            new LoadFromUrl(Constants.BASE_URL_STRING, Constants.SET_QUANTITY, cv,
+                                    LOADER_SET_QUANTITY, getApplicationContext(),
+                                    getSupportLoaderManager(), DocumentViewActivity.this);
+                        }
+                    }
+                });
+                builder.setNegativeButton("Anuleaza", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.show();
             }
 
         }

@@ -95,6 +95,8 @@ public class ProductsListActivity extends AppCompatActivity implements LoadFromU
         });
     }
 
+
+
     @Override
     public void jsonLoadFinish(JSONArray jarray, int idLoader) {
         if(jarray != null && idLoader == LOADER_LIST_OF_PRODUCTS){

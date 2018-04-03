@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -35,10 +36,12 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
     private List<Integer> mAssociatedLocationsIds;
     private Spinner mLocatiiUser;
     private int currentLocationId;
+
    // private int currentDocTypeId = 1;
     private static final int LOADER_TODAY_DOCUMENTS = 21;
     private static final int LOADER_USER_LOCATIONS = 20;
     private static final int LOADER_DEL_DOCUMENT = 23;
+    private static final int LOADER_DOC_STATUS = 27;
 //
 //    private static final int LOADER_DELETE_USER= 12;
 //    private static final int LOADER_USERS_STATUS = 13;
@@ -54,6 +57,7 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         rvDocuments = (RecyclerView) findViewById(R.id.rvDocuments);
         mLocatiiUser = (Spinner) findViewById(R.id.spinnerLocatii);
+
         mLocatiiUser.setOnItemSelectedListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
@@ -86,6 +90,7 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
                 startActivity(intent);
             }
         });
+
     }
 
     @Override
@@ -143,6 +148,12 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
 //            rvDocuments.setAdapter(adapter);
             adapter.setJsonArray(jarray);
         }
+        if(jarray != null && idLoader == LOADER_DOC_STATUS) {
+//            todayDocuments = jarray;
+//            adapter = new AllDocumentsActivity.DocumentsAdapter(todayDocuments);
+//            rvDocuments.setAdapter(adapter);
+            adapter.setJsonArray(jarray);
+        }
     }
 
     class DocumentsAdapter extends RecyclerView.Adapter<AllDocumentsActivity.DocumentsAdapter.ItemViewHolder>{
@@ -169,10 +180,17 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
             try {
                // String test = mJarr.getJSONObject(position).getString(Constants.JSON_TYPE.toString().toUpperCase());
                 holder.tvType.setText(
-                        mJarr.getJSONObject(position).getString(Constants.JSON_TYPE.toString()).toUpperCase());
-                holder.tvDocNo.setText(mJarr.getJSONObject(position).getString(Constants.JSON_ID.toString()) + " din ");
-                holder.tvDay.setText(mJarr.getJSONObject(position).getString(Constants.JSON_DAY.toString()));
-                holder.tvHour.setText(mJarr.getJSONObject(position).getString(Constants.JSON_HOUR.toString()));
+                        mJarr.getJSONObject(position).getString(Constants.JSON_TYPE).toUpperCase());
+                holder.tvDocNo.setText(mJarr.getJSONObject(position).getString(Constants.JSON_ID) + " din ");
+                holder.tvDay.setText(mJarr.getJSONObject(position).getString(Constants.JSON_DAY));
+                holder.tvHour.setText(mJarr.getJSONObject(position).getString(Constants.JSON_HOUR));
+                boolean status = mJarr.getJSONObject(position).getInt(Constants.JSON_STATUS) == 1 ? true : false;
+                if(status){
+                    holder.bFinalizare.setVisibility(View.GONE);
+                    holder.bEdit.setVisibility(View.GONE);
+                    holder.bDelete.setVisibility(View.GONE);
+                    holder.ivDone.setVisibility(View.VISIBLE);
+                }
             } catch (JSONException e){
                 e.printStackTrace();
             }
@@ -185,7 +203,8 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
 
         class ItemViewHolder extends RecyclerView.ViewHolder{
             TextView tvDocNo, tvType, tvHour, tvDay;
-            ImageView bEdit, bDelete;
+            ImageView bEdit, bDelete, ivDone;
+            CardView bFinalizare;
 
             public ItemViewHolder(View view){
                 super(view);
@@ -195,27 +214,16 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
                 tvDay = view.findViewById(R.id.tvdata);
                 bEdit = view.findViewById(R.id.bDocEdit);
                 bDelete = view.findViewById(R.id.bDocDelete);
-
+                bFinalizare = (CardView) view.findViewById(R.id.bFinalizare);
+                ivDone = (ImageView) view.findViewById(R.id.ivDone);
                 bEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        try {
-                            Intent intent = new Intent(AllDocumentsActivity.this, DocumentViewActivity.class);
-                            intent.putExtra("New", false);
-
-                           // intent.putExtra(Constants.JSON_TYPE, mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_TYPE).toUpperCase());
-                            SaveSharedPreferences.setDocumentType(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_TYPE).toUpperCase());
-                          //  intent.putExtra(Constants.JSON_ID_TIP_DOC, mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID_TIP_DOC));
-                            SaveSharedPreferences.setDocumentTypeID(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID_TIP_DOC));
-                          //  intent.putExtra(Constants.JSON_ID, mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID));
-                            SaveSharedPreferences.setDocumentNo(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID));
-                           // intent.putExtra(Constants.JSON_DAY, mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_DAY));
-                            SaveSharedPreferences.setDocumentDate(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_DAY));
-                            startActivity(intent);
-                        } catch (JSONException e){
-                            e.printStackTrace();
-                        }
+                    Intent intent = new Intent(AllDocumentsActivity.this, DocumentViewActivity.class);
+                    intent.putExtra("New", false);
+                    intent.putExtra("finalizat", false);
+                    setPref();
+                    startActivity(intent);
                     }
                 });
                 bDelete.setOnClickListener(new View.OnClickListener() {
@@ -234,7 +242,45 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
                         }
                     }
                 });
+                bFinalizare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            ContentValues cv = new ContentValues();
+                            int docId = mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID);
+                            cv.put(Constants.JSON_ID, docId);
+                            cv.put(Constants.JSON_LOCATIE, currentLocationId);
+                            int idUser = SaveSharedPreferences.getUserId(getApplication());
+                            cv.put(Constants.JSON_USER_ID, Integer.toString(idUser));
+                            new LoadFromUrl(Constants.BASE_URL_STRING, Constants.SET_DOC_STATUS, cv,
+                                    LOADER_DOC_STATUS, getApplicationContext(),
+                                    getSupportLoaderManager(), AllDocumentsActivity.this);
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                ivDone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(AllDocumentsActivity.this, DocumentViewActivity.class);
+                        intent.putExtra("New", false);
+                        intent.putExtra("finalizat", true);
+                        setPref();
+                        startActivity(intent);
+                    }
+                });
 
+            }
+            private void setPref(){
+                try {
+                    SaveSharedPreferences.setDocumentType(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_TYPE).toUpperCase());
+                    SaveSharedPreferences.setDocumentTypeID(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID_TIP_DOC));
+                    SaveSharedPreferences.setDocumentNo(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID));
+                    SaveSharedPreferences.setDocumentDate(getApplicationContext(), mJarr.getJSONObject(getAdapterPosition()).getString(Constants.JSON_DAY));
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
 
             }
 
