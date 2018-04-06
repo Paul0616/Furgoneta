@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#ff7f00</color>
     <color name="hintcolor">#77ff7f00</color>
+
+    <color name="aproviz">#d7e1f4</color>
+    <color name="bon">#dde6dd</color>
+    <color name="inventar">#f8edd9</color>
 </resources>

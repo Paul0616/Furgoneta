@@ -83,15 +83,17 @@
         <activity
             android:name=".manager.DocumentViewActivity"
             android:label="@string/title_activity_document_view"
-            android:theme="@style/AppTheme2"
-            android:parentActivityName=".manager.AllDocumentsActivity">
+            android:parentActivityName=".manager.AllDocumentsActivity"
+            android:theme="@style/AppTheme2">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".manager.AllDocumentsActivity" />
         </activity>
-        <activity android:name=".manager.ProductsListActivity"
-            android:theme="@style/AppTheme1"
-            android:label="Alege produse:"/>
+        <activity
+            android:name=".manager.ProductsListActivity"
+            android:label="Alege produse:"
+            android:theme="@style/AppTheme1" />
+        <activity android:name=".manager.MonetarActivity"></activity>
     </application>
 
 </manifest>

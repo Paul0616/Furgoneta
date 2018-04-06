@@ -3,6 +3,7 @@ package ro.duoline.furgoneta.manager;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -29,6 +30,9 @@ import ro.duoline.furgoneta.Utils.Constants;
 import ro.duoline.furgoneta.Utils.LoadFromUrl;
 import ro.duoline.furgoneta.Utils.SaveSharedPreferences;
 
+/**
+ * The type All documents activity.
+ */
 public class AllDocumentsActivity extends AppCompatActivity implements LoadFromUrl.LoadFromUrlFinished, AdapterView.OnItemSelectedListener{
     private RecyclerView rvDocuments;
     private JSONArray todayDocuments;
@@ -42,12 +46,18 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
     private static final int LOADER_USER_LOCATIONS = 20;
     private static final int LOADER_DEL_DOCUMENT = 23;
     private static final int LOADER_DOC_STATUS = 27;
+    /**
+     * The constant adapter.
+     */
 //
 //    private static final int LOADER_DELETE_USER= 12;
 //    private static final int LOADER_USERS_STATUS = 13;
     AllDocumentsActivity.DocumentsAdapter adapter;
 
-
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,13 +166,27 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
         }
     }
 
+    /**
+     * The type Documents adapter.
+     */
     class DocumentsAdapter extends RecyclerView.Adapter<AllDocumentsActivity.DocumentsAdapter.ItemViewHolder>{
 
         private JSONArray mJarr;
+
+        /**
+         * Instantiates a new Documents adapter.
+         *
+         * @param list the list
+         */
         public DocumentsAdapter(JSONArray list){
             this.mJarr = list;
         }
 
+        /**
+         * Set json array.
+         *
+         * @param list the list
+         */
         public void setJsonArray(JSONArray list){
             mJarr = list;
             notifyDataSetChanged();
@@ -175,10 +199,24 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
             return new AllDocumentsActivity.DocumentsAdapter.ItemViewHolder(view);
         }
 
+
         @Override
         public void onBindViewHolder(AllDocumentsActivity.DocumentsAdapter.ItemViewHolder holder, int position) {
             try {
                // String test = mJarr.getJSONObject(position).getString(Constants.JSON_TYPE.toString().toUpperCase());
+                int docType = mJarr.getJSONObject(position).getInt(Constants.JSON_ID_TIP_DOC);
+
+                switch (docType){
+                    case 1:
+                    holder.container.setBackgroundColor(getResources().getColor(R.color.aproviz, null));
+                    break;
+                    case 2:
+                    holder.container.setBackgroundColor(getResources().getColor(R.color.bon, null));
+                    break;
+                    case 4:
+                    holder.container.setBackgroundColor(getResources().getColor(R.color.inventar, null));
+                    break;
+                }
                 holder.tvType.setText(
                         mJarr.getJSONObject(position).getString(Constants.JSON_TYPE).toUpperCase());
                 holder.tvDocNo.setText(mJarr.getJSONObject(position).getString(Constants.JSON_ID) + " din ");
@@ -201,11 +239,47 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
             return mJarr.length();
         }
 
+        /**
+         * The type Item view holder.
+         */
         class ItemViewHolder extends RecyclerView.ViewHolder{
-            TextView tvDocNo, tvType, tvHour, tvDay;
-            ImageView bEdit, bDelete, ivDone;
+            /**
+             * The Tv doc no.
+             */
+            TextView tvDocNo, /**
+             * The Tv type.
+             */
+            tvType, /**
+             * The Tv hour.
+             */
+            tvHour, /**
+             * The Tv day.
+             */
+            tvDay;
+            /**
+             * The B edit.
+             */
+            ImageView bEdit, /**
+             * The B delete.
+             */
+            bDelete, /**
+             * The Iv done.
+             */
+            ivDone;
+            /**
+             * The B finalizare.
+             */
             CardView bFinalizare;
+            /**
+             * The Container.
+             */
+            ConstraintLayout container;
 
+            /**
+             * Instantiates a new Item view holder.
+             *
+             * @param view the view
+             */
             public ItemViewHolder(View view){
                 super(view);
                 tvDocNo = view.findViewById(R.id.tvNrDocument);
@@ -216,6 +290,7 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
                 bDelete = view.findViewById(R.id.bDocDelete);
                 bFinalizare = (CardView) view.findViewById(R.id.bFinalizare);
                 ivDone = (ImageView) view.findViewById(R.id.ivDone);
+                container = (ConstraintLayout) view.findViewById(R.id.documentsContainer);
                 bEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

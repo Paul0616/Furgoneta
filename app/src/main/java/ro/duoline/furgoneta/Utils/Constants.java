@@ -61,6 +61,7 @@ public class Constants {
     public static final String JSON_DAY = "day";
     public static final String JSON_ID_TIP_DOC = "tipDocId";
     public static final String JSON_QUANTITY = "cantitatea";
+    public static final String JSON_MOTIV = "motiv";
 
     public static void setCardEnabled(CardView cardView, boolean enabled){
         int colorEnabled = cardView.getContext().getResources().getColor(R.color.colorAccent);

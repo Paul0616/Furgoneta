@@ -41,30 +41,37 @@ public class MenuManagerActivity extends AppCompatActivity implements LoadFromUr
                 intent.putExtra("New", true);
                 SaveSharedPreferences.setDocumentType(getApplicationContext(), "FISA APROVIZIONARE");//intent.putExtra(Constants.JSON_TYPE, "FISA APROVIZIONARE");
                 SaveSharedPreferences.setDocumentTypeID(getApplicationContext(), 1);//intent.putExtra(Constants.JSON_ID_TIP_DOC, 1);
-                //intent.putExtra(Constants.JSON_LOCATIE, mLocatie);
                 intent.putExtra("locId", mLocatieId);
-
                 startActivity(intent);
             }
         });
         mBConsum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MenuManagerActivity.this, DocumentViewActivity.class);
+                intent.putExtra("New", true);
+                SaveSharedPreferences.setDocumentType(getApplicationContext(), "BON DE CONSUM");//intent.putExtra(Constants.JSON_TYPE, "FISA APROVIZIONARE");
+                SaveSharedPreferences.setDocumentTypeID(getApplicationContext(), 2);//intent.putExtra(Constants.JSON_ID_TIP_DOC, 1);
+                intent.putExtra("locId", mLocatieId);
+                startActivity(intent);
             }
         });
         mBDayClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(MenuAdminActivity.this, AddUsersActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(MenuManagerActivity.this, MonetarActivity.class);
+                startActivity(intent);
             }
         });
         mBFixture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(MenuAdminActivity.this, AddProductsActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(MenuManagerActivity.this, DocumentViewActivity.class);
+                intent.putExtra("New", true);
+                SaveSharedPreferences.setDocumentType(getApplicationContext(), "INVENTAR");//intent.putExtra(Constants.JSON_TYPE, "FISA APROVIZIONARE");
+                SaveSharedPreferences.setDocumentTypeID(getApplicationContext(), 4);//intent.putExtra(Constants.JSON_ID_TIP_DOC, 1);
+                intent.putExtra("locId", mLocatieId);
+                startActivity(intent);
             }
         });
         new LoadFromUrl(Constants.BASE_URL_STRING, Constants.GET_IS_DOC_AVAILABLE, null,
