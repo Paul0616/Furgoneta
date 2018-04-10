@@ -2,9 +2,12 @@ package ro.duoline.furgoneta.manager;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -208,13 +211,16 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
 
                 switch (docType){
                     case 1:
-                    holder.container.setBackgroundColor(getResources().getColor(R.color.aproviz, null));
+                    holder.container.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.aproviz));
                     break;
                     case 2:
-                    holder.container.setBackgroundColor(getResources().getColor(R.color.bon, null));
+                    holder.container.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.bon));
                     break;
+                    case 3:
+                        holder.container.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.fisa));
+                        break;
                     case 4:
-                    holder.container.setBackgroundColor(getResources().getColor(R.color.inventar, null));
+                        holder.container.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.inventar));
                     break;
                 }
                 holder.tvType.setText(
@@ -294,10 +300,15 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
                 bEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                    Intent intent = new Intent(AllDocumentsActivity.this, DocumentViewActivity.class);
+                    setPref();
+                    Intent intent;
+                    if(SaveSharedPreferences.getDocumentTypeID(getApplicationContext()) == 3){
+                        intent = new Intent(AllDocumentsActivity.this, InchidereActivity.class);
+                    } else {
+                        intent = new Intent(AllDocumentsActivity.this, DocumentViewActivity.class);
+                    }
                     intent.putExtra("New", false);
                     intent.putExtra("finalizat", false);
-                    setPref();
                     startActivity(intent);
                     }
                 });
@@ -338,10 +349,15 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
                 ivDone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(AllDocumentsActivity.this, DocumentViewActivity.class);
+                        setPref();
+                        Intent intent;
+                        if(SaveSharedPreferences.getDocumentTypeID(getApplicationContext()) == 3){
+                            intent = new Intent(AllDocumentsActivity.this, InchidereActivity.class);
+                        } else {
+                            intent = new Intent(AllDocumentsActivity.this, DocumentViewActivity.class);
+                        }
                         intent.putExtra("New", false);
                         intent.putExtra("finalizat", true);
-                        setPref();
                         startActivity(intent);
                     }
                 });

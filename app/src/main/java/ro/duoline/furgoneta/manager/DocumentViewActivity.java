@@ -52,7 +52,7 @@ public class DocumentViewActivity extends AppCompatActivity implements LoadFromU
         setTitle(getIntent().getStringExtra(Constants.JSON_LOCATIE));
 
         mDocType = (TextView) findViewById(R.id.tvDocType);
-        mDocNo = (TextView) findViewById(R.id.tvDocNo);
+        mDocNo = (TextView) findViewById(R.id.tvDocNo3);
         mDocDate = (TextView) findViewById(R.id.tvDocDate);
         docNew = getIntent().getBooleanExtra("New", true);
         mDocTypeID = SaveSharedPreferences.getDocumentTypeID(getApplicationContext());

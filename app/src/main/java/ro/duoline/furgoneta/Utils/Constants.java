@@ -3,10 +3,13 @@ package ro.duoline.furgoneta.Utils;
 import android.support.v7.widget.CardView;
 import android.widget.Spinner;
 
+import java.math.BigDecimal;
+
 import ro.duoline.furgoneta.R;
 
 /**
- * Created by Paul on 26/03/2018.
+ * Clasa Constants contine toate adresele pentru request de la server
+ *
  */
 
 public class Constants {
@@ -37,6 +40,10 @@ public class Constants {
     public static final String GET_DOCUMENT_PRODUCTS = "getDocumentProducts.php";
     public static final String SET_QUANTITY = "setQuantity.php";
     public static final String SET_DOC_STATUS = "setDocumentStatus.php";
+    public static final String GET_FISA_INCHIDERE = "getDayCloseDoc.php";
+    public static final String SET_FISA_INCHIDERE = "setFisaInchidere.php";
+    public static final String SET_NUMERAR = "setMonetar.php";
+    public static final String GET_MONETAR = "getMonetar.php";
 
     public static final String JSON_RESULT = "result";
     public static final String JSON_USER_ID = "userId";
@@ -62,6 +69,20 @@ public class Constants {
     public static final String JSON_ID_TIP_DOC = "tipDocId";
     public static final String JSON_QUANTITY = "cantitatea";
     public static final String JSON_MOTIV = "motiv";
+    public static final String JSON_NUMERAR = "numerar";
+    public static final String JSON_CARD = "card";
+    public static final String JSON_SOLD_CASA = "soldcasa";
+    public static final String JSON_BANI_1 = "bani_1";
+    public static final String JSON_BANI_5 = "bani_5";
+    public static final String JSON_BANI_10 = "bani_10";
+    public static final String JSON_BANI_50 = "bani_50";
+    public static final String JSON_LEI_1 = "lei_1";
+    public static final String JSON_LEI_5 = "lei_5";
+    public static final String JSON_LEI_10 = "lei_10";
+    public static final String JSON_LEI_50 = "lei_50";
+    public static final String JSON_LEI_100 = "lei_100";
+    public static final String JSON_LEI_200 = "lei_200";
+    public static final String JSON_LEI_500 = "lei_500";
 
     public static void setCardEnabled(CardView cardView, boolean enabled){
         int colorEnabled = cardView.getContext().getResources().getColor(R.color.colorAccent);
@@ -78,5 +99,11 @@ public class Constants {
             }
         }
         return index;
+    }
+
+    public static float round(float d, int decimalPlace){
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
     }
 }

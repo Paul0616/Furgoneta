@@ -16,5 +16,6 @@
     <string name="title_activity_add_users">Adaugare Useri</string>
     <string name="title_activity_all_documents">Documentele de azi</string>
     <string name="title_activity_document_view">Locatie</string>
+    <string name="moneda">LEI</string>
 
 </resources>

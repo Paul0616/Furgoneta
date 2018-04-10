@@ -59,7 +59,11 @@ public class MenuManagerActivity extends AppCompatActivity implements LoadFromUr
         mBDayClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuManagerActivity.this, MonetarActivity.class);
+                Intent intent = new Intent(MenuManagerActivity.this, InchidereActivity.class);
+                intent.putExtra("New", true);
+                SaveSharedPreferences.setDocumentType(getApplicationContext(), "FISA INCHEIERE ZI");
+                SaveSharedPreferences.setDocumentTypeID(getApplicationContext(), 3);
+                intent.putExtra("locId", mLocatieId);
                 startActivity(intent);
             }
         });

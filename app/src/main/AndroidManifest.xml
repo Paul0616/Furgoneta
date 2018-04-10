@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -93,7 +93,14 @@
             android:name=".manager.ProductsListActivity"
             android:label="Alege produse:"
             android:theme="@style/AppTheme1" />
-        <activity android:name=".manager.MonetarActivity"></activity>
+
+        <activity android:name=".manager.MonetarActivity"
+            android:parentActivityName=".manager.InchidereActivity"/>
+
+        <activity android:name=".manager.InchidereActivity"
+            android:label=""
+            android:theme="@style/AppTheme1"
+            android:parentActivityName=".manager.AllDocumentsActivity"/>
     </application>
 
 </manifest>

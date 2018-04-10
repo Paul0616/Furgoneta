@@ -40,7 +40,6 @@ import ro.duoline.furgoneta.Utils.Constants;
 import ro.duoline.furgoneta.Utils.SaveSharedPreferences;
 import ro.duoline.furgoneta.administrator.MenuAdminActivity;
 import ro.duoline.furgoneta.manager.AllDocumentsActivity;
-import ro.duoline.furgoneta.manager.MenuManagerActivity;
 
 
 /**

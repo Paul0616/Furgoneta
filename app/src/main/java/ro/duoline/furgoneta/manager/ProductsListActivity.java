@@ -2,7 +2,6 @@ package ro.duoline.furgoneta.manager;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -12,16 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ro.duoline.furgoneta.R;
 import ro.duoline.furgoneta.Utils.Constants;
@@ -41,8 +37,8 @@ public class ProductsListActivity extends AppCompatActivity implements LoadFromU
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products_list);
-        mDocID = SaveSharedPreferences.getDocumentNo(getApplicationContext());//getIntent().getIntExtra(Constants.JSON_ID, 0);
-        mDocTypeID = SaveSharedPreferences.getDocumentTypeID(getApplicationContext());//getIntent().getIntExtra(Constants.JSON_TYPE, 0);
+        mDocID = SaveSharedPreferences.getDocumentNo(getApplicationContext());
+        mDocTypeID = SaveSharedPreferences.getDocumentTypeID(getApplicationContext());
         rvProductslist = (RecyclerView) findViewById(R.id.rvProductsList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
