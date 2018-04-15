@@ -40,7 +40,8 @@ public class MenuAdminActivity extends AppCompatActivity implements LoadFromUrl.
         mBDocumente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MenuAdminActivity.this, ViewAllDocumentsActivity.class);
+                startActivity(intent);
             }
         });
         mBUseri.setOnClickListener(new View.OnClickListener() {

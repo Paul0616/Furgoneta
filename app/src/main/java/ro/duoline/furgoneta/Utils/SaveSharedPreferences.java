@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by Paul on 26/03/2018.
  */
@@ -97,6 +100,7 @@ public class SaveSharedPreferences {
     public static void setCurrentLocation(Context ctx, String curLoc){
         SharedPreferences.Editor editor = getSharedPreference(ctx).edit();
         editor.putString("currentLocation", curLoc);
+
         editor.commit();
     }
     public static String getCurrentLocation(Context ctx){
@@ -110,5 +114,15 @@ public class SaveSharedPreferences {
     }
     public static int getCurrentLocationId(Context ctx){
         return getSharedPreference(ctx).getInt("currentLocationId",0);
+    }
+
+    public static void setAssociatedlocations(Context ctx, Set<String> set){
+        SharedPreferences.Editor editor = getSharedPreference(ctx).edit();
+        editor.putStringSet("associatedLovcations", set);
+        editor.commit();
+    }
+
+    public static Set<String> getAssociatedlocations(Context ctx){
+        return getSharedPreference(ctx).getStringSet("associatedLovcations", new HashSet<String>());
     }
 }

@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toStartOf="@+id/spinnerLocatii"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/spinnerLocatii"
-        app:srcCompat="@drawable/ic_location_on_white_24dp" />
+        app:srcCompat="@drawable/ic_location_on_black_24dp" />
 
     <Spinner
         android:id="@+id/spinnerLocatii"

@@ -26,10 +26,14 @@ public class MonetarActivity extends AppCompatActivity implements TextView.OnEdi
     private static  final int LOADER_SET_NUMERAR = 31;
     private static  final int LOADER_GET_MONETAR = 32;
     float total = 0;
+    boolean finalizat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         monetarBinding = DataBindingUtil.setContentView(this, R.layout.activity_monetar);
+
+        finalizat = getIntent().getBooleanExtra("finalizat", false);
+        setTextsEnabled(finalizat);
         int docId = SaveSharedPreferences.getDocumentNo(getApplicationContext());
         ContentValues cv = new ContentValues();
         cv.put(Constants.JSON_ID, docId);
@@ -243,5 +247,19 @@ public class MonetarActivity extends AppCompatActivity implements TextView.OnEdi
         } catch (NumberFormatException e){
             e.printStackTrace();
         }
+    }
+
+    private void setTextsEnabled(boolean finalizat){
+        monetarBinding.et1B.setEnabled(!finalizat);
+        monetarBinding.et5B.setEnabled(!finalizat);
+        monetarBinding.et10B.setEnabled(!finalizat);
+        monetarBinding.et50B.setEnabled(!finalizat);
+        monetarBinding.et1L.setEnabled(!finalizat);
+        monetarBinding.et5L.setEnabled(!finalizat);
+        monetarBinding.et10L.setEnabled(!finalizat);
+        monetarBinding.et50L.setEnabled(!finalizat);
+        monetarBinding.et100L.setEnabled(!finalizat);
+        monetarBinding.et200L.setEnabled(!finalizat);
+        monetarBinding.et500L.setEnabled(!finalizat);
     }
 }

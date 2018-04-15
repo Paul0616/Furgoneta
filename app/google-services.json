@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "944667656602",
+    "firebase_url": "https://furgoneta-105a3.firebaseio.com",
+    "project_id": "furgoneta-105a3",
+    "storage_bucket": "furgoneta-105a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944667656602:android:7b6ae2c729b47884",
+        "android_client_info": {
+          "package_name": "ro.duoline.furgoneta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "944667656602-pleeoiu9tb57j1l62s0am7j1h6173tvo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ro.duoline.furgoneta",
+            "certificate_hash": "745263d42be8b9425c14ffcb66c7373bfb0d7617"
+          }
+        },
+        {
+          "client_id": "944667656602-ihoip2qb9a18ipdnvd6sejn1cmjvh2gc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWxYk0cJf933cig0e1v_OP8LI0oUukuAo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "944667656602-ihoip2qb9a18ipdnvd6sejn1cmjvh2gc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

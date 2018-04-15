@@ -13,6 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service android:name=".services.FirebaseIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".services.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".LoginActivity"
             android:windowSoftInputMode="adjustPan">
@@ -95,12 +108,31 @@
             android:theme="@style/AppTheme1" />
 
         <activity android:name=".manager.MonetarActivity"
-            android:parentActivityName=".manager.InchidereActivity"/>
+            android:parentActivityName=".manager.InchidereActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".manager.InchidereActivity"
             android:label=""
             android:theme="@style/AppTheme1"
             android:parentActivityName=".manager.AllDocumentsActivity"/>
+        <activity
+            android:name=".sofer.AllDocumentsSoferActivity"
+            android:label="@string/title_activity_all_documents_sofer"
+            android:parentActivityName=".LoginActivity"
+            android:theme="@style/AppTheme2">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity" />
+        </activity>
+        <activity
+            android:name=".administrator.ViewAllDocumentsActivity"
+            android:label="@string/title_activity_all_documents_admin"
+            android:parentActivityName=".LoginActivity"
+            android:theme="@style/AppTheme2">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity" />
+        </activity>
     </application>
 
 </manifest>

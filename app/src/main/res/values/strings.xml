@@ -15,7 +15,12 @@
     <string name="title_activity_add_products">Adaugare Produse</string>
     <string name="title_activity_add_users">Adaugare Useri</string>
     <string name="title_activity_all_documents">Documentele de azi</string>
+    <string name="title_activity_all_documents_sofer">Fisele de aprovizionare</string>
+    <string name="title_activity_all_documents_admin">Toate documentele</string>
     <string name="title_activity_document_view">Locatie</string>
     <string name="moneda">LEI</string>
+
+    <string name="notifications_drivers_channel_name">DriversMessages</string>
+    <string name="notifications_drivers_channel_description">Inform driver about new Supply list was recieved</string>
 
 </resources>

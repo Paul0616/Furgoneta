@@ -30,6 +30,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -40,6 +42,7 @@ import ro.duoline.furgoneta.Utils.Constants;
 import ro.duoline.furgoneta.Utils.SaveSharedPreferences;
 import ro.duoline.furgoneta.administrator.MenuAdminActivity;
 import ro.duoline.furgoneta.manager.AllDocumentsActivity;
+import ro.duoline.furgoneta.sofer.AllDocumentsSoferActivity;
 
 
 /**
@@ -68,6 +71,8 @@ public class LoginActivity extends AppCompatActivity implements LoadFromUrl.Load
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
         // Set up the login form.
         mUserNameView = (AutoCompleteTextView) findViewById(R.id.email);
         textInputLayoutEmail = (TextInputLayout) findViewById(R.id.textinputLayoutEmail);
@@ -104,7 +109,8 @@ public class LoginActivity extends AppCompatActivity implements LoadFromUrl.Load
                         Intent i = new Intent(LoginActivity.this, AllDocumentsActivity.class);
                         startActivity(i);
                     } else if(SaveSharedPreferences.getRol(getApplicationContext()).equals("sofer")) {
-
+                        Intent i = new Intent(LoginActivity.this, AllDocumentsSoferActivity.class);
+                        startActivity(i);
                     }
                 }
 
@@ -113,8 +119,9 @@ public class LoginActivity extends AppCompatActivity implements LoadFromUrl.Load
         bLogout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                String oldRole = SaveSharedPreferences.getRol(getApplicationContext());
                 SaveSharedPreferences.setUser(getApplicationContext(), "", 0, "", "", "");
-                setLogout();
+                setLogout(oldRole);
             }
         });
 
@@ -128,7 +135,10 @@ public class LoginActivity extends AppCompatActivity implements LoadFromUrl.Load
         mCardTitle.setText("START");
         bLogout.setVisibility(View.VISIBLE);
     }
-    private void setLogout(){
+    private void setLogout(String oldRole){
+       // if(SaveSharedPreferences.getRol(getApplicationContext()).equals("sofer")) {
+            Toast.makeText(getApplicationContext(), oldRole, Toast.LENGTH_SHORT).show();
+       // }
         textInputLayoutEmail.setVisibility(View.VISIBLE);
         textInputLayoutPassword.setVisibility(View.VISIBLE);
         mCardTitle.setText("Autentificare");
@@ -148,8 +158,9 @@ public class LoginActivity extends AppCompatActivity implements LoadFromUrl.Load
                         Toast.makeText(getApplicationContext(),
                                 "Userul " + SaveSharedPreferences.getFullname(getApplicationContext()) + " temporar inactiv.", Toast.LENGTH_LONG)
                                 .show();
+                        String oldRole = SaveSharedPreferences.getRol(getApplicationContext());
                         SaveSharedPreferences.setUser(getApplicationContext(), "", 0, "", "", "");
-                        setLogout();
+                        setLogout(oldRole);
                     } else {
                         showProgress(false);
 //                        Intent i = new Intent(LoginActivity.this, MenuAdminActivity.class);
@@ -162,8 +173,9 @@ public class LoginActivity extends AppCompatActivity implements LoadFromUrl.Load
                     Toast.makeText(getApplicationContext(),
                             "Userul " + SaveSharedPreferences.getFullname(getApplicationContext()) + " a fost sters din Baza de Date", Toast.LENGTH_LONG)
                             .show();
+                    String oldRole = SaveSharedPreferences.getRol(getApplicationContext());
                     SaveSharedPreferences.setUser(getApplicationContext(), "", 0, "", "", "");
-                    setLogout();
+                    setLogout(oldRole);
                 }
 
             } catch (JSONException e){

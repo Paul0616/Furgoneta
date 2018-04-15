@@ -64,6 +64,7 @@ public class InchidereActivity extends AppCompatActivity implements LoadFromUrl.
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(InchidereActivity.this, MonetarActivity.class);
+                i.putExtra("finalizat", finalizat);
                 startActivity(i);
             }
         });

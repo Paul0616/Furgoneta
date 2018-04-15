@@ -2,8 +2,6 @@ package ro.duoline.furgoneta.manager;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -24,14 +22,18 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ro.duoline.furgoneta.R;
 import ro.duoline.furgoneta.Utils.Constants;
 import ro.duoline.furgoneta.Utils.LoadFromUrl;
 import ro.duoline.furgoneta.Utils.SaveSharedPreferences;
+import ro.duoline.furgoneta.services.SendFCM;
 
 /**
  * The type All documents activity.
@@ -128,12 +130,16 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
             try{
                 mAssociatedLocations.clear();
                 mAssociatedLocationsIds.clear();
+                Set<String> setAssociatedLocations = new HashSet<String>();
                 for(int i = 0; i < jarray.length(); i++){
                     int loc = jarray.getJSONObject(i).getInt(Constants.JSON_LOCATIE);
                     String locden = jarray.getJSONObject(i).getString(Constants.JSON_NAME);
                     mAssociatedLocations.add(locden);
                     mAssociatedLocationsIds.add(loc);
+                    setAssociatedLocations.add(locden);
                 }
+                SaveSharedPreferences.setAssociatedlocations(getApplicationContext(), setAssociatedLocations);
+
                 ArrayAdapter<CharSequence> spinnerAdapter = new ArrayAdapter(this,
                         R.layout.spinner_row, mAssociatedLocations);
                 spinnerAdapter.setDropDownViewResource(R.layout.spinner_drop_down);
@@ -166,6 +172,31 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
 //            adapter = new AllDocumentsActivity.DocumentsAdapter(todayDocuments);
 //            rvDocuments.setAdapter(adapter);
             adapter.setJsonArray(jarray);
+            int doctypeid = SaveSharedPreferences.getDocumentTypeID(getApplicationContext());
+            if(doctypeid == 1) {
+                String locatia = SaveSharedPreferences.getCurrentLocation(getApplicationContext());
+                int docno = SaveSharedPreferences.getDocumentNo(getApplicationContext());
+                String datasiora = SaveSharedPreferences.getDocumentDate(getApplicationContext());
+
+                try {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.accumulate("to", "/topics/news");
+                    JSONObject jObj = new JSONObject();
+                    jObj.accumulate("sound", "default");
+                    jObj.accumulate("body", "Document: " + docno + "/" + datasiora + "\n" + locatia);
+                    jObj.accumulate("title", "FISA APROVIZIONARE NOUA");
+                    jObj.accumulate("location", locatia);
+                    jsonObject.accumulate("notification", jObj);
+                    jsonObject.accumulate("data", jObj);
+                    SendFCM sendFCM = new SendFCM(jsonObject, getApplicationContext());
+                    sendFCM.sendMessage();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                }
+            }
+
         }
     }
 
@@ -289,7 +320,7 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
             public ItemViewHolder(View view){
                 super(view);
                 tvDocNo = view.findViewById(R.id.tvNrDocument);
-                tvType = view.findViewById(R.id.tvTipDocument);
+                tvType = view.findViewById(R.id.tvDocType);
                 tvHour = view.findViewById(R.id.tvOra);
                 tvDay = view.findViewById(R.id.tvdata);
                 bEdit = view.findViewById(R.id.bDocEdit);

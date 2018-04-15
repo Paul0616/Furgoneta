@@ -195,6 +195,7 @@ public class EditAddUserActivity extends AppCompatActivity implements LoadFromUr
         }
         if(jarray != null && idLoader == LOADER_GET_USER_LOCATIONS) {
             try{
+                mAssociatedLocationsIds.clear();
                 for(int i = 0; i < jarray.length(); i++){
                     int loc = jarray.getJSONObject(i).getInt(Constants.JSON_LOCATIE);
                     mAssociatedLocationsIds.add(Integer.toString(loc));
@@ -348,7 +349,10 @@ public class EditAddUserActivity extends AppCompatActivity implements LoadFromUr
     private boolean isTelefonValid(String telefon) {
         //TODO: Replace this with your own logic
         //return Patterns.PHONE.matcher(telefon).matches();
-        String tel = PhoneNumberUtils.normalizeNumber(telefon);
+        String tel = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            tel = PhoneNumberUtils.normalizeNumber(telefon);
+        }
 
         if(TextUtils.isEmpty(telefon)){
           return false;
