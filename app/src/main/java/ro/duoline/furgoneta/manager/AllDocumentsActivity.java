@@ -1,11 +1,13 @@
 package ro.duoline.furgoneta.manager;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +36,7 @@ import ro.duoline.furgoneta.Utils.Constants;
 import ro.duoline.furgoneta.Utils.LoadFromUrl;
 import ro.duoline.furgoneta.Utils.SaveSharedPreferences;
 import ro.duoline.furgoneta.services.SendFCM;
+import ro.duoline.furgoneta.sofer.AllDocumentsSoferActivity;
 
 /**
  * The type All documents activity.
@@ -51,6 +54,7 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
     private static final int LOADER_USER_LOCATIONS = 20;
     private static final int LOADER_DEL_DOCUMENT = 23;
     private static final int LOADER_DOC_STATUS = 27;
+    private static final int LOADER_AVAILABLE_ENDING = 36;
     /**
      * The constant adapter.
      */
@@ -156,21 +160,23 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
             }
         }
         if(jarray != null && idLoader == LOADER_TODAY_DOCUMENTS) {
-//            todayDocuments = jarray;
-//            adapter = new AllDocumentsActivity.DocumentsAdapter(todayDocuments);
-//            rvDocuments.setAdapter(adapter);
             adapter.setJsonArray(jarray);
         }
         if(jarray != null && idLoader == LOADER_DEL_DOCUMENT) {
-//            todayDocuments = jarray;
-//            adapter = new AllDocumentsActivity.DocumentsAdapter(todayDocuments);
-//            rvDocuments.setAdapter(adapter);
             adapter.setJsonArray(jarray);
         }
+        if(jarray != null && idLoader == LOADER_AVAILABLE_ENDING) {
+            try{
+                if(jarray.getJSONObject(0).getBoolean(Constants.JSON_RESULT)){
+                   requestForSetDocStatus();
+                } else {
+                    showMessage(jarray.getJSONObject(0).getString(Constants.JSON_REASON));
+                }
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
         if(jarray != null && idLoader == LOADER_DOC_STATUS) {
-//            todayDocuments = jarray;
-//            adapter = new AllDocumentsActivity.DocumentsAdapter(todayDocuments);
-//            rvDocuments.setAdapter(adapter);
             adapter.setJsonArray(jarray);
             int doctypeid = SaveSharedPreferences.getDocumentTypeID(getApplicationContext());
             if(doctypeid == 1) {
@@ -198,6 +204,35 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
             }
 
         }
+    }
+    public void requestForSetDocStatus(){
+        ContentValues cv = new ContentValues();
+        int docId = SaveSharedPreferences.getDocumentNo(getApplicationContext());
+        cv.put(Constants.JSON_ID, docId);
+        cv.put(Constants.JSON_LOCATIE, currentLocationId);
+        int idUser = SaveSharedPreferences.getUserId(getApplication());
+        cv.put(Constants.JSON_USER_ID, Integer.toString(idUser));
+        new LoadFromUrl(Constants.BASE_URL_STRING, Constants.SET_DOC_STATUS, cv,
+                LOADER_DOC_STATUS, getApplicationContext(),
+                getSupportLoaderManager(), AllDocumentsActivity.this);
+    }
+
+    public void showMessage(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(AllDocumentsActivity.this);
+
+        builder.setTitle("NU este posibila finalizarea documentului");
+        builder.setIcon(R.drawable.ic_warning_black_24dp);
+        builder.setCancelable(false);
+        builder.setMessage(message);
+
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
     }
 
     /**
@@ -276,40 +311,32 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
             return mJarr.length();
         }
 
+
+        public void requestForDocContent(int position){
+            try {
+                ContentValues cv = new ContentValues();
+                int docId = mJarr.getJSONObject(position).getInt(Constants.JSON_ID);
+                cv.put(Constants.JSON_ID, docId);
+                new LoadFromUrl(Constants.BASE_URL_STRING, Constants.GET_AVAILABLE_ENDING, cv,
+                        LOADER_AVAILABLE_ENDING, getApplicationContext(),
+                        getSupportLoaderManager(), AllDocumentsActivity.this);
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
         /**
          * The type Item view holder.
          */
         class ItemViewHolder extends RecyclerView.ViewHolder{
-            /**
-             * The Tv doc no.
-             */
-            TextView tvDocNo, /**
-             * The Tv type.
-             */
-            tvType, /**
-             * The Tv hour.
-             */
-            tvHour, /**
-             * The Tv day.
-             */
-            tvDay;
-            /**
-             * The B edit.
-             */
-            ImageView bEdit, /**
-             * The B delete.
-             */
-            bDelete, /**
-             * The Iv done.
-             */
+
+            TextView tvDocNo, tvType, tvHour, tvDay;
+
+            ImageView bEdit,
+            bDelete,
             ivDone;
-            /**
-             * The B finalizare.
-             */
+
             CardView bFinalizare;
-            /**
-             * The Container.
-             */
+
             ConstraintLayout container;
 
             /**
@@ -362,19 +389,9 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
                 bFinalizare.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        try {
-                            ContentValues cv = new ContentValues();
-                            int docId = mJarr.getJSONObject(getAdapterPosition()).getInt(Constants.JSON_ID);
-                            cv.put(Constants.JSON_ID, docId);
-                            cv.put(Constants.JSON_LOCATIE, currentLocationId);
-                            int idUser = SaveSharedPreferences.getUserId(getApplication());
-                            cv.put(Constants.JSON_USER_ID, Integer.toString(idUser));
-                            new LoadFromUrl(Constants.BASE_URL_STRING, Constants.SET_DOC_STATUS, cv,
-                                    LOADER_DOC_STATUS, getApplicationContext(),
-                                    getSupportLoaderManager(), AllDocumentsActivity.this);
-                        } catch (JSONException e){
-                            e.printStackTrace();
-                        }
+                    setPref();
+                    requestForDocContent(getAdapterPosition());
+
                     }
                 });
                 ivDone.setOnClickListener(new View.OnClickListener() {

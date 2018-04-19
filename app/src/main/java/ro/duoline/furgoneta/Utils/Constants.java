@@ -47,6 +47,7 @@ public class Constants {
     public static final String GET_SOFER_DOCUMENTS = "getDriverDocuments.php";
     public static final String SET_BOUGHT = "setBought.php";
     public static final String GET_ADMIN_VIEW_DOCS = "getAllDocuments.php";
+    public static final String GET_AVAILABLE_ENDING = "getAvailableEnding.php";
 
     public static final String JSON_RESULT = "result";
     public static final String JSON_USER_ID = "userId";
@@ -87,6 +88,7 @@ public class Constants {
     public static final String JSON_LEI_200 = "lei_200";
     public static final String JSON_LEI_500 = "lei_500";
     public static final String JSON_HEADER = "header";
+    public static final String JSON_REASON = "reason";
 
     public static void setCardEnabled(CardView cardView, boolean enabled){
         int colorEnabled = cardView.getContext().getResources().getColor(R.color.colorAccent);
