@@ -314,12 +314,15 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
 
         public void requestForDocContent(int position){
             try {
+
                 ContentValues cv = new ContentValues();
                 int docId = mJarr.getJSONObject(position).getInt(Constants.JSON_ID);
+
                 cv.put(Constants.JSON_ID, docId);
                 new LoadFromUrl(Constants.BASE_URL_STRING, Constants.GET_AVAILABLE_ENDING, cv,
                         LOADER_AVAILABLE_ENDING, getApplicationContext(),
                         getSupportLoaderManager(), AllDocumentsActivity.this);
+
             } catch (JSONException e){
                 e.printStackTrace();
             }
@@ -390,7 +393,11 @@ public class AllDocumentsActivity extends AppCompatActivity implements LoadFromU
                     @Override
                     public void onClick(View v) {
                     setPref();
-                    requestForDocContent(getAdapterPosition());
+                    String type = SaveSharedPreferences.getDocumentType(getApplicationContext());
+                    if(type.equals("FISA INCHEIERE ZI"))
+                        requestForSetDocStatus();
+                    else
+                        requestForDocContent(getAdapterPosition());
 
                     }
                 });
