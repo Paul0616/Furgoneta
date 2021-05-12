@@ -109,12 +109,12 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="32dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:cardBackgroundColor="@color/colorAccent"
                 app:cardCornerRadius="18dp">
 
                 <TextView
-                    android:id="@+id/cardTitle"
+                    android:id="@+id/cardTitle1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
